@@ -19,7 +19,7 @@ python setup.py install
 To run the plugin and generate an blank_removal file:
 
 ```
-qiime blankremoval-plugin blankremoval-function --i-input-artifact data/qiime_table.qza --p-metadatafile data/metadata.tsv --o-output-artifact data/output.qza
+qiime blankremoval-plugin blankremoval-function --i-input-artifact data/qiime_table.qza --p-metadatafile data/unprocessed_metadata.tsv --o-output-artifact data/output.qza
 ```
 
 ## Test
@@ -43,4 +43,15 @@ open feature-table.txt and check if it has been remove_blank.
   File "/home/user/miniconda3/envs/qiime2-2023.7/lib/python3.8/site-packages/pkg_resources/__init__.py", line 2524, in resolve
     module = __import__(self.module_name, fromlist=['__name__'], level=0)
 ModuleNotFoundError: No module named 'qiime2_blank_removal_plugin'
+```
+
+## debug:
+uninstall:
+```
+pip uninstall qiime2_blankremoval_plugin
+```
+
+## install from pip:
+```
+pip install git+https://github.com/pluckySquid/qiime2_blank_removal_plugin
 ```

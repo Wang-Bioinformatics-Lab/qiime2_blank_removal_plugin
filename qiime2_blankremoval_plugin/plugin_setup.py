@@ -8,18 +8,16 @@ from q2_types.feature_table import FeatureTable, RelativeFrequency, Frequency
 
 
 def blankremoval_function(input_artifact: biom.Table, metadatafile: str) -> biom.Table:
-
     # When cutoff is low, more noise (or background) detected; With higher cutoff, less background detected, thus more features observed
     cutoff = 0.1
 
     condition = 1
 
-    df = input_artifact.to_dataframe(dense=True)
+    ft = input_artifact.to_dataframe(dense=True)
 
-    md = pd.read_csv(metadatafile, sep = "\t").set_index("sample id")
+    md = pd.read_csv(metadatafile, sep = "\t").set_index("filename")
     new_md = md.copy()
     new_md.index = [name.strip() for name in md.index]
-    
     
     # for each col in new_md
     # 1) removing the spaces (if any)
@@ -29,16 +27,14 @@ def blankremoval_function(input_artifact: biom.Table, metadatafile: str) -> biom
         if new_md[col].dtype == str:
             new_md[col] = [item.strip().replace(" ", "_").upper() for item in new_md[col]]
 
-    new_ft = df.copy() #storing the files under different names to preserve the original files
+    new_ft = ft.copy() #storing the files under different names to preserve the original files
     
-
     new_ft.index.name = "CustomIndex"
     # drop all columns that are not mzML or mzXML file names, I may not need this but it won't hurt
     new_ft.drop(columns=[col for col in new_ft.columns if ".mz" not in col], inplace=True)
     # # remove " Peak area" from column names, may not need but won't hurt
     new_ft.rename(columns={col: col.replace(" Peak area", "").strip() for col in new_ft.columns}, inplace=True)
     
-
     if sorted(new_ft.columns) != sorted(new_md.index):
         # print the md rows / ft column which are not in ft columns / md rows and remove them
         ft_cols_not_in_md = [col for col in new_ft.columns if col not in new_md.index]
@@ -54,11 +50,9 @@ def blankremoval_function(input_artifact: biom.Table, metadatafile: str) -> biom
 
     df = pd.DataFrame({"LEVELS": inside_levels(data).iloc[condition-1]["LEVELS"]})
     df.index = [*range(1, len(df)+1)]
-    #df.to_csv("../data/df.txt", header=False, index=False)
-    #Among the shown levels of an attribute, select the one to remove
+    
+    #Splitting the data into blanks and samples based on the metadata
     blank_id = 1
-
-        #Splitting the data into blanks and samples based on the metadata
     md_blank = data[data[inside_levels(data)['ATTRIBUTES'][condition]] == df['LEVELS'][blank_id]]
 
     blank = new_ft[list(md_blank.index)]
