@@ -6,7 +6,10 @@ If you have already build this plugin and what to update the plugin, run:
  qiime dev refresh-cache
 ```
 
-Go to the roo folder.
+Go to the root folder.
+```
+pip install -e .
+```
 
 Then you can build the plugin with 
 ```
@@ -16,7 +19,7 @@ python setup.py install
 To run the plugin and generate an blank_removal file:
 
 ```
-qiime blank_removal-plugin blank_removal-function   --i-input-artifact data/qiime_table.qza --o-output-artifact data/output.qza
+qiime blankremoval-plugin blankremoval-function   --i-input-artifact data/qiime_table.qza --o-output-artifact data/output.qza
 ```
 
 ## Test
