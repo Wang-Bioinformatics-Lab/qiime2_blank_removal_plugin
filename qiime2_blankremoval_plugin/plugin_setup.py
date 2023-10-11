@@ -7,7 +7,7 @@ from qiime2.plugin import Metadata, MetadataColumn, Categorical, Numeric, Semant
 from q2_types.feature_table import FeatureTable, RelativeFrequency, Frequency
 
 
-def blankremoval_function(input_artifact: biom.Table, metadatafile: int) -> biom.Table:
+def blankremoval_function(input_artifact: biom.Table, metadatafile: Str) -> biom.Table:
 
     # When cutoff is low, more noise (or background) detected; With higher cutoff, less background detected, thus more features observed
     cutoff = 0.1
@@ -60,6 +60,7 @@ def blankremoval_function(input_artifact: biom.Table, metadatafile: int) -> biom
 
         #Splitting the data into blanks and samples based on the metadata
     md_blank = data[data[inside_levels(data)['ATTRIBUTES'][condition]] == df['LEVELS'][blank_id]]
+
     blank = new_ft[list(md_blank.index)]
     md_samples = data[data[inside_levels(data)['ATTRIBUTES'][condition]] != df['LEVELS'][blank_id]]
 
