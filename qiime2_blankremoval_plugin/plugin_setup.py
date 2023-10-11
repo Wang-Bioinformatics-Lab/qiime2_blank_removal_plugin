@@ -1,11 +1,13 @@
 import qiime2
 import biom
-import qiime2.plugin
 import pandas as pd
+
+import qiime2.plugin
+from qiime2.plugin import Metadata, MetadataColumn, Categorical, Numeric, SemanticType
 from q2_types.feature_table import FeatureTable, RelativeFrequency, Frequency
 
 
-def blankremoval_function(input_artifact: biom.Table) -> biom.Table:
+def blankremoval_function(input_artifact: biom.Table, metadatafile: int) -> biom.Table:
 
     # When cutoff is low, more noise (or background) detected; With higher cutoff, less background detected, thus more features observed
     cutoff = 0.1
@@ -14,7 +16,7 @@ def blankremoval_function(input_artifact: biom.Table) -> biom.Table:
 
     df = input_artifact.to_dataframe(dense=True)
 
-    md = pd.read_csv("data/metadata.tsv", sep = "\t").set_index("sample id")
+    md = pd.read_csv(metadatafile, sep = "\t").set_index("sample id")
     new_md = md.copy()
     new_md.index = [name.strip() for name in md.index]
     
@@ -52,7 +54,7 @@ def blankremoval_function(input_artifact: biom.Table) -> biom.Table:
 
     df = pd.DataFrame({"LEVELS": inside_levels(data).iloc[condition-1]["LEVELS"]})
     df.index = [*range(1, len(df)+1)]
-    
+    #df.to_csv("../data/df.txt", header=False, index=False)
     #Among the shown levels of an attribute, select the one to remove
     blank_id = 1
 
@@ -106,8 +108,8 @@ plugin = qiime2.plugin.Plugin(
 plugin.methods.register_function(
     function=blankremoval_function,
     inputs={'input_artifact': FeatureTable[Frequency]},
-    parameters={},  # Add parameters if necessary
-    outputs=[('output_artifact', FeatureTable[RelativeFrequency])],
+    parameters={'metadatafile': qiime2.plugin.Str},  # Add parameters if necessary
+    outputs=[('output_artifact', FeatureTable[Frequency])],
     output_descriptions={
         'output_artifact': 'Description of the output artifact.'
     },

@@ -19,7 +19,7 @@ python setup.py install
 To run the plugin and generate an blank_removal file:
 
 ```
-qiime blankremoval-plugin blankremoval-function   --i-input-artifact data/qiime_table.qza --o-output-artifact data/output.qza
+qiime blankremoval-plugin blankremoval-function --i-input-artifact data/qiime_table.qza --p-metadatafile data/metadata.tsv --o-output-artifact data/output.qza
 ```
 
 ## Test
