@@ -7,7 +7,7 @@ from qiime2.plugin import Metadata, MetadataColumn, Categorical, Numeric, Semant
 from q2_types.feature_table import FeatureTable, RelativeFrequency, Frequency
 
 
-def blankremoval_function(input_artifact: biom.Table, metadatafile: Str) -> biom.Table:
+def blankremoval_function(input_artifact: biom.Table, metadatafile: str) -> biom.Table:
 
     # When cutoff is low, more noise (or background) detected; With higher cutoff, less background detected, thus more features observed
     cutoff = 0.1
