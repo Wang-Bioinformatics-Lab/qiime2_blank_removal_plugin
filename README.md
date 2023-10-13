@@ -55,4 +55,4 @@ pip uninstall qiime2_blankremoval_plugin
 ```
 pip install git+https://github.com/pluckySquid/qiime2_blank_removal_plugin
 ```
-End of File.
+
